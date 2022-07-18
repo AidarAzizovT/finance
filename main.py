@@ -1,7 +1,12 @@
 import pandas
 from typing import Dict
-import rows
-   
+
+class rows():
+    POPULATION = 'Численность населения, занятого в экономике МО'
+    SALARY = 'Средняя заработная плата по МО'
+    NORMATIV_NDFL = 'Норматив отчисления НДФЛ в бюджете МО'
+    INCOME_PLAN = 'Консолидированные доходы бюджета МО (план)'
+    INCOME_FACT = 'Консолидированные доходы бюджета МО (факт)'
 
 
 def make_calculation(population: float, salary: float, Nndfl: float, Bp: float, Bf: float) -> float:
@@ -26,16 +31,10 @@ def read_excel(file_name) -> Dict:
     If in a file are errors with data, returns
     empty dict'''
     df = pandas.read_excel(file_name)
-    try:
-        population: float = df[rows.POPULATION][0]
-        salary: float = df[rows.SALARY][0]
-        Nndfl: float = df[rows.NORMATIV_NDFL][0]
-        Bp: float = df[rows.INCOME_PLAN][0]
-        Bf: float = df[rows.INCOME_FACT][0]
-        return {'population': population, 'salary': salary, 'Nndfl': Nndfl, 'Bp': Bp, 'Bf': Bf}
-    except:
-        print("In the file is not necessary data")
-        return dict()
+    values = [elem for elem in df.values]
+    return {rows.NORMATIV_NDFL: values[0], rows.POPULATION: values[1], rows.SALARY: values[2], rows.INCOME_PLAN: values[3], rows.INCOME_FACT: rows[4]}
+
+
 
 
 def make_output_file(PNndfl, file_name) -> None:
@@ -43,12 +42,12 @@ def make_output_file(PNndfl, file_name) -> None:
     in an excel file.'''
     pandas.DataFrame({'PNndfl': [PNndfl, ]}).to_excel(file_name)
 
+df = pandas.read_excel('input data.xlsx')
 
-data_from_excel: Dict = read_excel('input data.xlsx')
-
-if len(data_from_excel) != 0:
-    result_of_calculations: float = make_calculation(*data_from_excel.values())
-    make_output_file(result_of_calculations, 'result.xlsx')
-    print("Successful!")
-else:
-    print('Here are errors with input data.')
+#
+# if len(df) != 0:
+#     result_of_calculations: float = make_calculation(*df.values())
+#     make_output_file(result_of_calculations, 'result.xlsx')
+#     print("Successful!")
+# else:
+#     print('Here are errors with input data.')
